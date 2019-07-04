@@ -12,8 +12,9 @@ import {
 import { TasksService } from './tasks.service';
 import { Task, TaskStatus } from './task.model';
 import { CreateTaskDto } from './dto/create-task-dto';
+import { TaskStatusValidationPipe } from './pipes/task-status-validation-pipe';
 
-@Controller('tasks')
+@Controller('tasks') // A route of this controller
 export class TasksController {
   constructor(private taskService: TasksService) {}
 
@@ -37,7 +38,10 @@ export class TasksController {
   }
 
   @Patch('/:id/status')
-  updateTask(@Param('id') id: string, @Body('status') status: TaskStatus) {
+  updateTask(
+    @Param('id') id: string,
+    @Body('status', TaskStatusValidationPipe) status: TaskStatus,
+  ) {
     return this.taskService.updateTaskStatus(id, status);
   }
 }
